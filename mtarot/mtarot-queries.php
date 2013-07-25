@@ -8,42 +8,80 @@ require_once('mtarot.php');
 /** TCARD QUERIES **/
 // Used by shortcodes and widgets
 
+/**
+ * get a single tarot-card post via custom arguments
+ */
 function mtarot_get_tcard_post( $args ){
+	$tcards = mtarot_get_tcard_posts( $args );
+	return empty( $tcards ) ? NULL : $tcards[0];
+}
+
+/**
+ * get a single tarot-card post by id
+ */
+function mtarot_get_tcard( $post_id ){
+	return mtarot_get_tcard_posts( array( 'id' => $post_id ) );
+}
+
+/**
+ * Workhorse function which inputs mtarot card arguments, 
+ * turns it into a query arguments list, and then 
+ * returns the wordpress posts fetched with those arguments.
+ */
+function mtarot_get_tcard_posts( $args ){
+
+	/**
+	 * 'id' argument
+	 * - finds a specific card by post_id
+	 */
+	if( !empty( $args['id'] ) ){
+		$tcard = get_post( $args['id'] );
+		if( !empty( $tcard ) ){
+			// if the single result specified by the ID is found, return it immediately
+			return array( $tcard );
+		}
+	}
+
+	// If an ID is not specified, we need to issue a WP_Query to handle the lookup...
 	
-	// Set the arguments used for the post query
+	// By default, fetch all custom post types matching the tarot-card type, and "shuffle" the deck by ordering them randomly.
 	$qargs = array(
 		'post_type'		=> tcard_option('type-name'),
-		'orderby' 		=> 'desc',
+		'orderby' 		=> 'random',
 	);
 	
-	if( !is_empty( $args['tarot-slug'] ) ){
+	
+	/**
+	 * 'tarot-slug' argument
+	 */
+	if( !empty( $args['tarot-slug'] ) ){
 		// get cards where custom field "tarot-slug" matches $args['tarot-slug']
 		$qargs['meta_key'] = 'tarot-slug';
 		$qargs['meta_value'] = $args['tarot-slug'];
-		$qargs['numberposts'] = 1;
-	} else {
-		$qargs['orderby'] = 'rand';
-	}
+	} 
 	
-	// Filter by category
-	if( !is_empty( $args['category'] ) ){
+	
+	/**
+	 * 'category' argument
+	 * - adds a category requirement to the post query -- can be used to filter by deck
+	 */
+	if( !empty( $args['category'] ) ){
 		$qargs['category'] = $args['category'];
 	}
 	
-	// Filter by overleaf
-	if( !is_empty( $args['overleaf'] ) ){
+	
+	/**
+	 * 'overleaf' argument
+	 * - restricts the query to posts which belong to a specific overleaf taxonomy
+	 */
+	if( !empty( $args['overleaf'] ) ){
 		$qargs['overleaf'] = $args['overleaf'];
 	}
 	
 	MECHO( 'qargs: ' . $qargs );
 	
-	// Get list of card IDs which match query
-	$posts_array = get_posts( $qargs );
-	
-	if( count( $posts_array ) > 0 ){
-		return $posts_array[0];
-	}
-	return NULL; 
+	// return list of card IDs which match query
+	return get_posts( $qargs );
 }
 
 
