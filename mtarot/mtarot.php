@@ -20,12 +20,14 @@ require_once('mtarot-question.php');	// HTML forms and functions for initiating 
 
 require_once('mtarot-shortcodes.php');	// Official WordPress API for [tarot-card] and [tarot-form] replacement tags
 require_once('mtarot-parsing.php');		// Parsing of content to replace [tarot-card] slots with rendered HTML
-require_once('mtarot-layout.php');		// Settings for and parsing of tarot card layouts
+require_once('mtarot-layout.php');		// HTML primitives used to wrap tarot card layouts
 
 require_once('mtarot-slot.php');		// HTML primitives and functions used for rendering tarot layout slots
 require_once('mtarot-filters.php');		// Filters used to limit the cards dealt to a particular layout slot
 
 require_once('mtarot-tcard.php');		// HTML primitives and functions used for rendering tarot cards
+require_once('mtarot-widgets.php');		// Hooks into WordPress's widget API to use shortcode and HTML snippets inside a widget
+
 
 /* Taxonomy Accessors */
 function MTAROT_DEFAULT_TAXONOMIES_ARGS(){
