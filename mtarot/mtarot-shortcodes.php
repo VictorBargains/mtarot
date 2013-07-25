@@ -89,13 +89,15 @@ function tcard_shortcode( $toptions, $content=null ){
 	// Initialize output
 	$html = '';
 
+/*
+
 	// Set the arguments used for the post query
 	$qargs = array(
 		'post_type'		=> tcard_option('type-name'),
 		'orderby' 		=> 'desc',
 	);
 	
-	if( !is_empty( $args['tarot-slug'] ) ){
+	if( !empty( $args['tarot-slug'] ) ){
 		// get cards where custom field "tarot-slug" matches $args['tarot-slug']
 		$qargs['meta_key'] = 'tarot-slug';
 		$qargs['meta_value'] = $args['tarot-slug'];
@@ -105,12 +107,12 @@ function tcard_shortcode( $toptions, $content=null ){
 	}
 	
 	// Filter by category
-	if( !is_empty( $args['category'] ) ){
+	if( !empty( $args['category'] ) ){
 		$qargs['category'] = $args['category'];
 	}
 	
 	// Filter by overleaf
-	if( !is_empty( $args['overleaf'] ) ){
+	if( !empty( $args['overleaf'] ) ){
 		$qargs['overleaf'] = $args['overleaf'];
 	}
 	
@@ -119,11 +121,15 @@ function tcard_shortcode( $toptions, $content=null ){
 	// Get list of card IDs which match query
 	$posts_array = get_posts( $qargs );
 	
+	*/
+	
+	$posts_array = mtarot_get_tcard_posts( $args );
+	
 	// Pick a random polarity unless one was specified
-	$polarity = is_empty( $args['polarity'] ) ? array_random('up','down') : $args['polarity'];
+	$polarity = empty( $args['polarity'] ) ? array_random('up','down') : $args['polarity'];
 	
 	// Append HTML for slot with dealt card if no error
-	if( is_empty( $posts_array ) ){
+	if( empty( $posts_array ) ){
 		$html += '<div class="error">Error: cannot deal card (no posts matching query).</div>';
 	} else {
 		
