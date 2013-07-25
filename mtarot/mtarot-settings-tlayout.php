@@ -68,10 +68,16 @@ function mtarot_layout_options_page(){
 // Layout Post Types Section
 function tlayout_type_section_text(){ echo 'Set the database names of the custom post type you are using to represent tarot layouts.'; }
 
+function tlayout_option_type_name(){ 
+	echo mtarot_posttypes_pulldown_html( 'tlayout_options[type_name]', tlayout_option('type_name'), 'tlayout_type_name' );
+}
+
+/*
 function tlayout_option_type_name(){
 	$options = get_option('tlayout_options');
 	echo "<input id='tlayout_type_name' name='tlayout_options[type_name]' size='30' type='text' value='{$options['type_name']}' />";
 }
+*/
 
 // Layout Form Section
 function tlayout_form_section_text(){ echo 'Set the Prompts (shown before) and Hints (shown after) for the Question and Layout elements that make up the Tarot Form (called via the [mtarot-form] shortcode)'; }
