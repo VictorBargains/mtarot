@@ -24,6 +24,8 @@ function MTAROT_SHORTCODE_ALLOWED_ARGUMENTS(){ //Arguments allowed inside `[taro
  
 require_once('mtarot-question.php');
 
+/** TAROT FORM SHORTCODE **/
+
 function MTAROT_FORM_DEFAULT_SHORTCODE_ATTS(){
 	return array(
 		'width' => '440',
@@ -54,6 +56,8 @@ function mtarot_form_shortcode( $atts ){
 	}
 }
 add_shortcode( 'mtarot-form', 'mtarot_form_shortcode' );
+
+/** TAROT CARD SHORTCODE **/
 
 /* Shortcode Content Parsing*/
 function MTAROT_DEFAULT_SHORTCODE_ATTS(){ // This array specifies the default arguments and values for the shortcode
@@ -122,6 +126,11 @@ function tcard_shortcode( $toptions, $content=null ){
 	if( is_empty( $posts_array ) ){
 		$html += '<div class="error">Error: cannot deal card (no posts matching query).</div>';
 	} else {
+		
+		// TODO: Offer a selection mode to choose which html method is called to render the card
+		// TODO: Introduce shortcode argument to manage selection mode
+		// TODO: Add widget which offers parameters to duplicate shortcode output
+		
 		$html += mtarot_dealt_card_html( $posts_array[0], $polarity );
 	}
 	

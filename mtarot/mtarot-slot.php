@@ -25,6 +25,8 @@ function mtarot_validate_argument( $value ){
 //	$slot['toptions'] is the expanded associative array of card options for that slot
 //	$slot['html'] is the content that the tag will be replaced with
 function mtarot_slots( $text ){
+	// TODO: re-engineer to use wordpress shortcode API rather than parsing '[tarot-card ...]' manually.
+
 	$slots = array();
 	// Find a `[tarot-card {arguments}]` tag in the post
 	$regex = '/\[tarot-card\s*([^\]]*)]/i';

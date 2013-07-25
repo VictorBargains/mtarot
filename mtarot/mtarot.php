@@ -4,7 +4,7 @@
 	Plugin URI: 	http://www.themichaelteaching.com/
 	Description: 	Display Tarot Cards individually or as part of a reading which gets dealt randomly from the deck.
 	Author: 		Victor Andersen
-	Version: 		0.2
+	Version: 		0.3
 	Author URI: 	http://www.themichaelteaching.com/
 */
 
