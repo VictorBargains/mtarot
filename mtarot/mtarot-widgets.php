@@ -18,7 +18,7 @@ class MTarot_Card_Widget extends WP_Widget {
 		parent::__construct(
 			'mtarot_card_widget', // Base ID
 			'Tarot Card Widget', // Name
-			array( 'description' => __( 'Michael Tarot Card Widget', 'text_domain' ), ) // Args
+			array( 'description' => __( 'Michael Tarot Card Widget' ), ) // Args
 		);
 	}
 
@@ -38,12 +38,8 @@ class MTarot_Card_Widget extends WP_Widget {
 		if ( ! empty( $title ) )
 			echo $args['before_title'] . $title . $args['after_title'];
 			
-		
-		// TODO: Fetch data about what card to display	
-		echo __( 'Card of the Day coming soon...', 'text_domain' );
-		
-		//echo do_shortcode( '[tcard]' );
-		
+		echo mtarot_daily_card_html(); 
+	
 		echo $args['after_widget'];
 	}
 
