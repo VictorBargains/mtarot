@@ -15,6 +15,8 @@ register_activation_hook(__FILE__, 'mtarot_set_default_options');
 require_once('mtarot-settings.php');	// Administrative settings panels and forms
 require_once('mtarot-style.php');		// Static inclusion and dynamic generation of tarot card/layout stylesheets
 
+require_once('mtarot-daily.php');		// Support for a "card of the day" feature
+
 require_once('mtarot-elements.php');	// HTML Primitives used for rendering content
 require_once('mtarot-question.php');	// HTML forms and functions for initiating new tarot readings
 
