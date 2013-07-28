@@ -24,6 +24,35 @@ function mtarot_get_tcard( $post_id ){
 }
 
 /**
+ * get all ids of all tarot-card posts in date order
+ */
+function mtarot_get_tcard_ids(){
+	$results = $wpdb->get_results("
+		SELECT post_id 
+		FROM $wpdb->posts 
+		WHERE post_type = " . tcard_option('type-name')  . "
+		ORDER BY post_date
+	");
+	return $results;
+}
+
+/**
+ * get a random ID of a tarot-card post, with an exclusion list
+ */
+function mtarot_random_card_id( $exclude = array() ){
+	//1. get all tarot card post IDs
+	$ids = mtarot_get_tcard_ids();
+	
+	//2. remove any IDs which match $exclude
+	$x_ids = array_diff( $ids, $exclude );
+	
+	//3. return a remaining ID at random
+	$r_id = array_rand( $x_ids );
+	
+	return $x_ids[$r_id]; 
+}
+
+/**
  * Workhorse function which inputs mtarot card arguments, 
  * turns it into a query arguments list, and then 
  * returns the wordpress posts fetched with those arguments.

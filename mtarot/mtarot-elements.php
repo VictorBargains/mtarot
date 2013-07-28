@@ -137,6 +137,22 @@ function mtarot_posttypes_pulldown_html( $name, $value, $id='' ){
 	return mtarot_option_select_html( $name, $values, $names, $id, 'select-posttype', 1, $selected );
 }
 
+// single-item select box with polarity values
+function mtarot_polarities_pulldown_html( $name, $value, $id='' ){
+	$polarities = MTAROT_ALLOWED_POLARITIES();
+	$names = array(
+	  	"+ Positive (up)",
+	  	"- Negative (down)" 
+	);
+	
+	$name = 'tcard_options[daily_polarity]';
+	foreach( $polarities as $polarity ){
+		if( $polarity == $value ){ $selected = $value; }
+		
+	}
+	return mtarot_option_select_html( $name, $polarities, $names, $id, 'select-polarity', 1, $selected );
+}
+
 // TODO: Move and extend form generation functions here
 
 // TODO: Move and extend options page generation functions here

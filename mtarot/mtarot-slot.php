@@ -135,12 +135,12 @@ function mtarot_undealt_card_html( $post, $toptions ){
 	return $html;
 }
 
-function mtarot_dealt_card_html( $post, $polarity ){
+function mtarot_dealt_card_html( $post, $polarity, $desc_index='random' ){
 	$html .= mtarot_div( $post, 'tcard', $polarity );
 	$html .= '<a target="_blank" href="/tcard/' . $post->post_name . '">' . $post->post_title;
 	$html .= mtarot_card_face_html($post, $polarity) . '</a>';
 	$html .= mtarot_card_polarity_html($post, $polarity);
-	$html .= mtarot_card_description_html($post, $polarity);
+	$html .= mtarot_card_description_html($post, $polarity, $desc_index);
 	$html .= '</div><!--/tcard-->';
 	return $html;
 }

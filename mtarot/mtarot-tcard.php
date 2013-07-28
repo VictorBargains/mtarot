@@ -51,30 +51,36 @@ function mtarot_random_polarity(){
 }
 
 // Get a random polar description of the card (if no polarity specified, returns post content)
-function mtarot_random_description( $post, $polarity='' ){
+function mtarot_card_description( $post, $polarity='random', $index='random' ){
+	if( $polarity == 'random' ){ $polarity = mtarot_random_polarity(); }
+	
 	$meta = '';
 	switch( $polarity ){
 		case 'up': $meta = 'positive-description'; break;
 		case 'down': $meta = 'negative-description'; break;
 	}
+	
 	$descs = get_post_meta( $post->ID, $meta, false );
 
 	if( empty($descs) ){ return $post->post_excerpt; }
-
-	$dindex = array_rand($descs);
+	
+	$dindex = ($index == 'random') ? array_rand($descs) : ($index % count($descs) );
+	
 	return $descs[$dindex];
 }
 
-function mtarot_card_desc_up( $post ){
+function mtarot_card_desc_up( $post, $index='random' ){
+	return mtarot_card_description( $post, 'up', $index );/*
 	$desc = get_post_meta( $post->ID, 'positive-description', false );
-	$dindex = array_rand($desc);
-	return $desc[$dindex];
+	$dindex = ($index == 'random') ? array_rand($desc) : $index;
+	return $desc[$dindex];*/
 }
 
-function mtarot_card_desc_down( $post ){
+function mtarot_card_desc_down( $post, $index='random' ){
+	return mtarot_card_description( $post, 'down', $index );/*
 	$desc = get_post_meta( $post->ID, 'negative-description', false );
-	$dindex = array_rand($desc);
-	return $desc[$dindex];
+	$dindex = ($index == 'random') ? array_rand($desc) : $index;
+	return $desc[$dindex];*/
 }
 
 /* Show entire card */
@@ -145,13 +151,14 @@ function mtarot_card_back_html( $post, $toptions ){
 	return $html;
 }
 
-function mtarot_card_description_html( $post, $polarity='' ){
+function mtarot_card_description_html( $post, $polarity='random', $desc_index='random' ){
 	$html = mtarot_div( $post, 'tcard-description', $polarity );
-	switch( $polarity ){
+	$html .= mtarot_card_description( $post, $polarity, $desc_index );
+/*	switch( $polarity ){
 		case 'up': $html .= mtarot_card_desc_up($post);		break;
 		case 'down': $html .= mtarot_card_desc_down($post); 	break;
 		default: $html .= $post->post_excerpt; 			break;
-	}
+	}*/
 	$html .= "</div><!--/tcard-description-->\n";
 	return $html;
 }
