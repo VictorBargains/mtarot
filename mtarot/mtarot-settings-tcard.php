@@ -19,7 +19,8 @@ function mtarot_default_tcard_options(){
 		'daily_post_id' => '',
 		'daily_polarity' => '',
 		'daily_desc_index' => 0,
-		'daily_autogenerate' => '1',
+		'daily_autogenerate' => 1,
+		'daily_generate' => 0,
 		'daily_date' => ''
 	);
 }
@@ -55,7 +56,8 @@ function tcard_admin_init(){
 	add_settings_field( 'tcard_daily_post_id', 'Post ID:', 'mtarot_option_daily_post_id', 'tcard_options_page', 'tcard_daily_section' );	
 	add_settings_field( 'tcard_daily_polarity', 'Polarity:', 'mtarot_option_daily_polarity', 'tcard_options_page', 'tcard_daily_section' );	
 	add_settings_field( 'tcard_daily_desc_index', 'Description Index:', 'mtarot_option_desc_index', 'tcard_options_page', 'tcard_daily_section' );	
-	add_settings_field( 'tcard_daily_autogenerate", "Auto-generate new Daily card Each Day:"', 'mtarot_option_daily_autogenerate', 'tcard_options_page', 'tcard_daily_section' );
+	add_settings_field( 'tcard_daily_autogenerate', 'Auto-generate new card daily:', 'mtarot_option_daily_autogenerate', 'tcard_options_page', 'tcard_daily_section' );
+	add_settings_field( 'tcard_daily_generate', 'Generate new card now:', 'mtarot_option_daily_generate', 'tcard_options_page', 'tcard_daily_section' );
 	//add_settings_field( 'tcard_daily_date", "Daily Card Date:"', 'mtarot_option_daily_date', 'tcard_options_page', 'tcard_daily_section' );
 }
 
@@ -131,8 +133,13 @@ function mtarot_option_desc_index(){
 function mtarot_option_daily_autogenerate(){
 	echo '<input name="tcard_options[daily_autogenerate]" type="checkbox" value="1" '; 
 	checked( '1', tcard_option( 'daily_autogenerate' ) );
-    echo '<label for="tcard_options[daily_autogenerate]">Auto-generate daily card</label>';
+    echo '<label for="tcard_options[daily_autogenerate]">Generate daily</label>';
 }
 
+function mtarot_option_daily_generate(){
+	echo '<input name="tcard_options[daily_generate]" type="checkbox" value="1" '; 
+	checked( '1', tcard_option( 'daily_generate' ) );
+    echo '<label for="tcard_options[daily_generate]">Generate now</label>';
+}
 
 ?>

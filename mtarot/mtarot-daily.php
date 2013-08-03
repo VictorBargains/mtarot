@@ -27,7 +27,7 @@
 				$new_id = mtarot_random_card_id( $exclude );
 	
 				// To process post meta data we need to get the post which is our new daily card
-				$tcard = mtarot_get_tcard_post( $new_id );
+				$tcard = get_post( $new_id );
 				
 				// make a hypothetical card-of-the-day data structure for each possible polarity/description combination
 				$possible_cotds = array();

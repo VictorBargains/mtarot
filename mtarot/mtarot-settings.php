@@ -67,5 +67,8 @@ function mtarot_validate_slug( $slug ){
 	return $slug;
 }
 
-
+function mtarot_validate_checkbox( $bool ){
+	// turn a boolean value into a 1 or 0
+	return $bool ? 1 : 0;
+}
 ?>

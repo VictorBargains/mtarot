@@ -9,7 +9,8 @@
 */
 
 /* Respond to Plugin Activation */
-register_activation_hook(__FILE__, 'mtarot_set_default_options');
+register_activation_hook(__FILE__, 'mtarot_activate');
+register_deactivation_hook(__FILE__, 'mtarot_deactivate');
 
 /* Include Component Files */
 require_once('mtarot-settings.php');	// Administrative settings panels and forms
@@ -42,7 +43,24 @@ function MTAROT_DEFAULT_TAXONOMIES_ARGS(){
 function mtarot_taxonomy_names() { return get_taxonomies( MTAROT_DEFAULT_TAXONOMIES_ARGS(), 'names' ); }
 function mtarot_taxonomies() { return get_taxonomies( MTAROT_DEFAULT_TAXONOMIES_ARGS(), 'objects' ); }
 
+/* PLUGIN ACTIVTATION EVENT */
+function mtarot_activate() {
+	$tcard_opts = get_option('tcard_options');
+	if( empty( $tcard_opts ) ){
+		mtarot_set_default_options();	
+	}
+	else {
+		// TODO: check to see if plugin has added new options we should be aware of
+		
+		// for now, leave old options intact and hope new options can handle null values.
+		mtarot_set_default_options();
+	}
+}
 
+/* PLUGIN DEACTIVATION EVENT */
+function mtarot_deactivate() {
+	// TODO: reset the card-of-the-day tokens if the user has set some option to do so on deactivation
+}
 
 
 /* Debug Functions  */
