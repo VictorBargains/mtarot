@@ -29,14 +29,20 @@
 				// To process post meta data we need to get the post which is our new daily card
 				$tcard = get_post( $new_id );
 				
+				if( empty( $tcard ) ){
+					continue;
+				}
+				
 				// make a hypothetical card-of-the-day data structure for each possible polarity/description combination
 				$possible_cotds = array();
+				
+				$current_time = split( " ", current_time( 'mysql' ) );
 				
 				// find all positive and negative descriptions available
 				$neg_descs = get_post_meta( $new_id, 'negative-description' );
 				for( $i = 0; $i < count( $neg_descs ); $i++ ){
 					$possible_cotds[] = array(
-						'date' => split( " ", current_time( 'timestamp' ), 1 ),
+						'date' => $current_time[0],
 						'polarity' => 'down',
 						'desc_index' => $i
 					);
@@ -45,7 +51,7 @@
 				$pos_descs = get_post_meta( $new_id, 'positive-description' );
 				for( $i = 0; $i < count( $pos_descs ); $i++ ){
 					$possible_cotds[] = array(
-						'date' => split( " ", current_time( 'timestamp' ), 1 ),
+						'date' => $current_time[0],
 						'polarity' => 'up',
 						'desc_index' => $i
 					);
@@ -54,13 +60,20 @@
 				// test to see if this card has been used as a card of the day before
 				$cotd_metas = get_post_meta( $new_id, 'card-of-the-day' );
 	
+				// randomize possible outcomes so if we pick the first one it will be randomly selected
+				shuffle( $possible_cotds );
+				
 				// go through possible descs at random and keep the first one which hasn't already been used
-				foreach( shuffle( $possible_cotds ) as $cotd ){
+				foreach( $possible_cotds as $cotd ){
 	
 					// we will assume this $cotd can be used unless we find one with a matching polarity/description pair in the DB
 					$keep_desc = true;
 				
 					// check each card-of-the-day meta field stored in the post to find a match
+					if( empty( $cotd_metas ) ){
+						$chosen_cotd = $cotd;
+						break;
+					}
 					foreach( $cotd_metas as $cotd_meta ){
 						if( $cotd_meta['polarity'] == $cotd['polarity'] && $cotd_meta['desc_index'] == $cotd['desc_index'] ){
 							// one match within the DB means the $cotd we are testing has already been used.
@@ -121,9 +134,10 @@
 	// Get the data describing the card of the day, auto-generating it if the option is set.
  	function mtarot_get_daily(){
 		
-		$current_date = split( " ", current_time('timestamp'), 1 );
+		$current_time = split( " ", current_time('mysql') );
 		
-		if( $current_date != tcard_option('daily_date') ){
+		
+		if( $current_time[0] != tcard_option('daily_date') ){
 			if( tcard_option('daily_autogenerate') ){
 				mtarot_generate_daily();
 			}	
@@ -150,10 +164,12 @@
 				// set the global options data to identify this card as the card of the day
 				$tcard_opts = get_option('tcard_options');
 				
+				$current_time = split( " ", current_time('mysql') );
+				
 				$tcard_opts['daily_post_id'] = $daily['id'];
 				$tcard_opts['daily_polarity'] = $daily['polarity'];
 				$tcard_opts['daily_desc_index'] = $daily['desc_index'];
-				$tcard_opts['daily_date'] = isset( $daily['date'] ) ? $daily['date'] : split( " ", current_time('timestamp'), 1 );
+				$tcard_opts['daily_date'] = isset( $daily['date'] ) ? $daily['date'] : $current_time[0];
 				
 				update_option( 'tcard_options', $tcard_opts );
 				

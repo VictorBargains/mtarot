@@ -31,9 +31,12 @@ function tcard_options_validate( $input ){
 	$input['image_width'] = mtarot_validate_number( $input['image_width'] );
 	$input['image_height'] = mtarot_validate_number( $input['image_height'] );
 	$input['type_name'] = mtarot_validate_slug( $input['type_name'] );
-	$array_keys = array_keys($input['taxes_allowed']); 
-	foreach( $array_keys as $key ){
-		$input[$key] = mtarot_validate_slug( $input[$key] ); 
+	
+	if( !empty( $input['taxes_allowed'] ) ){
+		$array_keys = array_keys($input['taxes_allowed']); 
+		foreach( $array_keys as $key ){
+			$input[$key] = mtarot_validate_slug( $input[$key] ); 
+		}
 	}
 //	$input['type_slug'] = mtarot_validate_slug( $input['type_slug'] );
 

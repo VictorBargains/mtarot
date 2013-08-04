@@ -27,13 +27,14 @@ function mtarot_get_tcard( $post_id ){
  * get all ids of all tarot-card posts in date order
  */
 function mtarot_get_tcard_ids(){
-	$results = $wpdb->get_results("
-		SELECT post_id 
-		FROM $wpdb->posts 
-		WHERE post_type = " . tcard_option('type-name')  . "
-		ORDER BY post_date
-	");
-	return $results;
+	global $wpdb;
+	$typename = tcard_option('type_name');
+	$postids = $wpdb->get_col( $wpdb->prepare("
+		SELECT      ID
+		FROM        $wpdb->posts 
+		WHERE 		post_type LIKE '$typename'
+	") );
+	return empty($postids) ? array() : $postids;
 }
 
 /**
@@ -42,6 +43,8 @@ function mtarot_get_tcard_ids(){
 function mtarot_random_card_id( $exclude = array() ){
 	//1. get all tarot card post IDs
 	$ids = mtarot_get_tcard_ids();
+	
+	if( empty( $ids ) ){ return NULL; }
 	
 	//2. remove any IDs which match $exclude
 	$x_ids = array_diff( $ids, $exclude );

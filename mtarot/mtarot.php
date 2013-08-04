@@ -16,6 +16,7 @@ register_deactivation_hook(__FILE__, 'mtarot_deactivate');
 require_once('mtarot-settings.php');	// Administrative settings panels and forms
 require_once('mtarot-style.php');		// Static inclusion and dynamic generation of tarot card/layout stylesheets
 
+require_once('mtarot-queries.php');		// Support for querying the wordpress database
 require_once('mtarot-daily.php');		// Support for a "card of the day" feature
 
 require_once('mtarot-elements.php');	// HTML Primitives used for rendering content

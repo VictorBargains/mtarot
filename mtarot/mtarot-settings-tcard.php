@@ -127,7 +127,7 @@ function mtarot_option_daily_polarity(){
 }
 
 function mtarot_option_desc_index(){
-	echo mtarot_option_text_html( 'tcard_options[daily_desc_index]', tcard_option('daily_desc_index'), 'tcard_daily_desc_index' );
+	echo mtarot_option_text_html( 'tcard_options[daily_desc_index]', tcard_option('daily_desc_index'), 'tcard_daily_desc_index', 10 );
 }
 
 function mtarot_option_daily_autogenerate(){
