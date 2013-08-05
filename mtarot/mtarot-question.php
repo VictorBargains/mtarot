@@ -60,7 +60,7 @@ function mtarot_question_form_asknew_html( $current_post ){
 	$html .= '</td></tr><tr align="center" valign="middle">';
 	$html .= '<td width="135"><label for="question">' . tlayout_option('form_questionLabel') . ' <i>(required)</i></label></td>';
 	$html .= '<td width="443">' . mtarot_question_input_html( '' ) . '</td>';
-	$html .= '<td width="135">' . mtarot_question_submit_ask_html( 'Ask Michael' ) . '</td></tr>';
+	$html .= '<td width="135">' . mtarot_question_submit_ask_html( tlayout_option('form_submitButton') ) . '</td></tr>';
 //	$html .= '<tr align="center" valign="middle"><td width="135"><label for="tlayout">' . tlayout_option('form_layoutLabel') . '</label></td>';
 //	$html .= '<td colspan="2" align="left">' . mtarot_layout_pulldown_html( $current_post ) . tlayout_option('form_layoutHint') . '</td>';
 //	$html .= '</tr>';
@@ -88,7 +88,7 @@ function mtarot_question_layout_form( $current_post ){
     $html .= '<tr align="center" valign="middle">';
 	$html .= '<td width="478">' . mtarot_question_input_html( '', 'Type your question for Michael here', '55' ) . '</td>';
 	$html .= '<td width="200">' . mtarot_layout_pulldown_html( $current_post ) . '</td>';
-	$html .= '<td width="135" rowspan="2">' . mtarot_question_submit_ask_html( 'Ask Michael' ) . '</td></tr>';
+	$html .= '<td width="135" rowspan="2">' . mtarot_question_submit_ask_html( tlayout_option('form_submitButton') ) . '</td></tr>';
 	$html .= '<tr align="center" valign="top">';
 	$html .= '<td><label for="question">Type your question for a tarot reading from Michael <i>(required)</i></label></td>';
 	$html .= '<td><label for="tlayout">then choose a layout.</label></td>';

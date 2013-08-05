@@ -31,7 +31,7 @@ function MTAROT_FORM_DEFAULT_SHORTCODE_ATTS(){
 		'width' => '440',
 		'style' => 'light',
 		'method' => 'POST',
-		'action' => '/',
+		'action' => '/tarot-layout/michaels-thought/',	// This should be pulled dynamically, or a specific page for a reading should be made
 		'questionType' => 'new',
 		'showAsked' => 'true',
 		'questionprompt' => tlayout_option('form_questionPrompt'),
@@ -126,7 +126,7 @@ function tcard_shortcode( $toptions, $content=null ){
 	$posts_array = mtarot_get_tcard_posts( $args );
 	
 	// Pick a random polarity unless one was specified
-	$polarity = empty( $args['polarity'] ) ? array_random('up','down') : $args['polarity'];
+	$polarity = empty( $args['polarity'] ) ? mtarot_random_polarity() : $args['polarity'];
 	
 	// Append HTML for slot with dealt card if no error
 	if( empty( $posts_array ) ){

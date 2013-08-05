@@ -98,23 +98,29 @@ function mtarot_card_desc_down( $post, $index='random' ){
 }
 
 /* Show entire card */
-function mtarot_card( $post, $polarity='' ){
-	echo mtarot_card_html( $post, $polarity );
+function mtarot_card( $post, $polarity='random', $desc_index='random' ){
+	echo mtarot_card_html( $post, $polarity, $desc_index );
 }
 
 // Must be in The Loop
 function mtarot_the_card(){
 	global $post;
-	mtarot_card($post);
+	mtarot_card($post, 'up', -1);
 }
 
 /* Card HTML Components */
-function mtarot_card_html( $post, $polarity='' ){
+function mtarot_card_html( $post, $polarity='random', $desc_index=0 ){
 	$html = mtarot_div( $post, 'tcard', $polarity );
 	$html .= mtarot_card_face_html( $post, $polarity );
 	$html .= mtarot_card_polarity_html( $post, $polarity );
 	$html .= mtarot_card_label_html( $post, $polarity );
-	$html .= mtarot_card_description_html( $post, $polarity );
+	
+	if( $desc_index < 0 ){
+		// Only show non-negative descriptions
+	} else {
+		$html .= mtarot_card_description_html( $post, $polarity, $desc_index );
+	}
+	
 	$html .= mtarot_card_taxonomies_html( $post );
 	$html .= "</div><!--/tcard-->\n";
 	return $html;
