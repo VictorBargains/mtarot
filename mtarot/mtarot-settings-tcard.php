@@ -11,6 +11,7 @@ function tcard_option( $option ){ $o = get_option('tcard_options'); return $o[$o
 function mtarot_default_tcard_options(){
 	return array(
 		'image_path' => '/MichaelCards',
+		'image_type' => 'jpg',
 		'image_width' => '150',
 		'image_height' => '251',
 		'image_back' => '/wp-content/uploads/2011/03/cardback.jpg',
@@ -44,6 +45,7 @@ function tcard_admin_init(){
 	add_settings_section( 'tcard_appearance_section', 'Tarot Card Images', 'tcard_image_section_text', 'tcard_options_page' );
 	add_settings_field( 'tcard_image_back', 'Card Back Image URL:', 'mtarot_option_card_image_back', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_path', 'Card Face Image Directory:', 'mtarot_option_card_image_path', 'tcard_options_page', 'tcard_appearance_section' );
+	add_settings_field( 'tcard_image_type', 'Image extension type:', 'mtarot_option_card_image_type', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_width', 'Card Image Width:', 'mtarot_option_card_image_width', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_height', 'Card Image Height:', 'mtarot_option_card_image_height', 'tcard_options_page', 'tcard_appearance_section' );
 
@@ -86,7 +88,11 @@ function mtarot_option_card_image_back(){
 
 function mtarot_option_card_image_path(){ 
 	echo mtarot_option_text_html( 'tcard_options[image_path]', tcard_option('image_path'), 'tcard_image_path', 100 ); 
-	echo '<br /><i>(this directory will be searched for a file with the name `{tarot-slug}-{polarity}.jpg`, all lowercase, to be displayed when a card is dealt face up)</i>';
+	echo '<br /><i>(this directory will be searched for a file with the name `{tarot-slug}-{polarity}.{image-type}`, all lowercase, to be displayed when a card is dealt face up)</i>';
+}
+
+function mtarot_option_card_image_type(){ 
+	echo mtarot_option_text_html( 'tcard_options[image_type]', tcard_option('image_type'), 'tcard_image_type', 10 ); 
 }
 
 function mtarot_option_card_image_width(){ 

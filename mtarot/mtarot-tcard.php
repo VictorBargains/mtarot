@@ -145,7 +145,7 @@ function mtarot_card_label_html( $post, $polarity='' ){
 
 function mtarot_card_img_html( $post, $polarity='' ){
 	$imgName = mtarot_slug($post->ID) . '-' . (empty($polarity)? 'up' : $polarity) ;
-	$url = tcard_option('image_path') . '/' . $imgName . '.jpg';
+	$url = tcard_option('image_path') . '/' . $imgName . '.' . tcard_option('image_type');
 	$class = mtarot_class( 'tcard-face', $polarity );
 	$id = mtarot_id( $post, 'tcard-face', $polarity );
 	$dimensions = 'width="' . tcard_option('image_width') . '" height="' . tcard_option('image_height') . '"';
