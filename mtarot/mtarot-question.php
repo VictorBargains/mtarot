@@ -49,7 +49,7 @@ function mtarot_shortcode_form_html( $args ){
 
 // New Question Form
 function mtarot_question_form_asknew_html( $current_post ){
-	$html = '<form class="mtarot-asknew" method="post" action="' . $_SERVER['REQUEST_URI'] . '">';	
+	$html = '<form class="mtarot-asknew" method="post" action="/tarot-layout/michaels-thought/">';	
 	$question = mtarot_question();
 //	$qprompt = tlayout_option('form_questionPrompt');
 	$qprompt = 'Get a Michael reading with this layout:';
@@ -82,11 +82,11 @@ function mtarot_question_form_askagain_html( $current_post, $question='' ){
 }
 
 function mtarot_question_layout_form( $current_post ){
-	$html = '<form class="mtarot-asklayout" method="post" action="' . $_SERVER['REQUEST_URI'] . '">';	
+	$html = '<form class="mtarot-asklayout" method="post" action="/tarot-layout/michaels-thought/">';	
 	$question = mtarot_question();
 	$html .= '<center><table width="713" border="0" cellspacing="0" cellpadding="0">';
     $html .= '<tr align="center" valign="middle">';
-	$html .= '<td width="478">' . mtarot_question_input_html( '', 'Type your question for Michael here', '55' ) . '</td>';
+	$html .= '<td width="478">' . mtarot_question_input_html( '', 'Type your question for Michael here', '40' ) . '</td>';
 	$html .= '<td width="200">' . mtarot_layout_pulldown_html( $current_post ) . '</td>';
 	$html .= '<td width="135" rowspan="2">' . mtarot_question_submit_ask_html( tlayout_option('form_submitButton') ) . '</td></tr>';
 	$html .= '<tr align="center" valign="top">';
