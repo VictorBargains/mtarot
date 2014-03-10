@@ -25,8 +25,6 @@ function mtarot_validate_argument( $value ){
 //	$slot['toptions'] is the expanded associative array of card options for that slot
 //	$slot['html'] is the content that the tag will be replaced with
 function mtarot_slots( $text ){
-	// TODO: re-engineer to use wordpress shortcode API rather than parsing '[tarot-card ...]' manually.
-
 	$slots = array();
 	// Find a `[tarot-card {arguments}]` tag in the post
 	$regex = '/\[tarot-card\s*([^\]]*)]/i';
@@ -135,12 +133,12 @@ function mtarot_undealt_card_html( $post, $toptions ){
 	return $html;
 }
 
-function mtarot_dealt_card_html( $post, $polarity, $desc_index='random' ){
+function mtarot_dealt_card_html( $post, $polarity ){
 	$html .= mtarot_div( $post, 'tcard', $polarity );
 	$html .= '<a target="_blank" href="/tcard/' . $post->post_name . '">' . $post->post_title;
 	$html .= mtarot_card_face_html($post, $polarity) . '</a>';
 	$html .= mtarot_card_polarity_html($post, $polarity);
-	$html .= mtarot_card_description_html($post, $polarity, $desc_index);
+	$html .= mtarot_card_description_html($post, $polarity);
 	$html .= '</div><!--/tcard-->';
 	return $html;
 }

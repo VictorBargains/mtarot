@@ -31,22 +31,8 @@ function tcard_options_validate( $input ){
 	$input['image_width'] = mtarot_validate_number( $input['image_width'] );
 	$input['image_height'] = mtarot_validate_number( $input['image_height'] );
 	$input['type_name'] = mtarot_validate_slug( $input['type_name'] );
-	
-	if( !empty( $input['taxes_allowed'] ) ){
-		$array_keys = array_keys($input['taxes_allowed']); 
-		foreach( $array_keys as $key ){
-			$input[$key] = mtarot_validate_slug( $input[$key] ); 
-		}
-	}
+	foreach( array_keys($input['taxes_allowed']) as $key ){	$input[$key] = mtarot_validate_slug( $input[$key] ); }
 //	$input['type_slug'] = mtarot_validate_slug( $input['type_slug'] );
-
-	$input['daily_autogenerate'] = mtarot_validate_checkbox( $input['daily_autogenerate'] );
-	$input['daily_generate'] = mtarot_validate_checkbox( $input['daily_generate'] );
-
-	if( $input['daily_generate'] == 1 ){
-		mtarot_generate_daily();
-		$input['daily_generate'] = 0;
-	}
 	return $input;
 }
 
@@ -65,62 +51,50 @@ function mtarot_random_polarity(){
 }
 
 // Get a random polar description of the card (if no polarity specified, returns post content)
-function mtarot_card_description( $post, $polarity='random', $index='random' ){
-	if( $polarity == 'random' ){ $polarity = mtarot_random_polarity(); }
-	
+function mtarot_random_description( $post, $polarity='' ){
 	$meta = '';
 	switch( $polarity ){
 		case 'up': $meta = 'positive-description'; break;
 		case 'down': $meta = 'negative-description'; break;
 	}
-	
 	$descs = get_post_meta( $post->ID, $meta, false );
 
 	if( empty($descs) ){ return $post->post_excerpt; }
-	
-	$dindex = ($index == 'random') ? array_rand($descs) : ($index % count($descs) );
-	
+
+	$dindex = array_rand($descs);
 	return $descs[$dindex];
 }
 
-function mtarot_card_desc_up( $post, $index='random' ){
-	return mtarot_card_description( $post, 'up', $index );/*
+function mtarot_card_desc_up( $post ){
 	$desc = get_post_meta( $post->ID, 'positive-description', false );
-	$dindex = ($index == 'random') ? array_rand($desc) : $index;
-	return $desc[$dindex];*/
+	$dindex = array_rand($desc);
+	return $desc[$dindex];
 }
 
-function mtarot_card_desc_down( $post, $index='random' ){
-	return mtarot_card_description( $post, 'down', $index );/*
+function mtarot_card_desc_down( $post ){
 	$desc = get_post_meta( $post->ID, 'negative-description', false );
-	$dindex = ($index == 'random') ? array_rand($desc) : $index;
-	return $desc[$dindex];*/
+	$dindex = array_rand($desc);
+	return $desc[$dindex];
 }
 
 /* Show entire card */
-function mtarot_card( $post, $polarity='random', $desc_index='random' ){
-	echo mtarot_card_html( $post, $polarity, $desc_index );
+function mtarot_card( $post, $polarity='' ){
+	echo mtarot_card_html( $post, $polarity );
 }
 
 // Must be in The Loop
 function mtarot_the_card(){
 	global $post;
-	mtarot_card($post, 'up', -1);
+	mtarot_card($post);
 }
 
 /* Card HTML Components */
-function mtarot_card_html( $post, $polarity='random', $desc_index=0 ){
+function mtarot_card_html( $post, $polarity='' ){
 	$html = mtarot_div( $post, 'tcard', $polarity );
 	$html .= mtarot_card_face_html( $post, $polarity );
 	$html .= mtarot_card_polarity_html( $post, $polarity );
 	$html .= mtarot_card_label_html( $post, $polarity );
-	
-	if( $desc_index < 0 ){
-		// Only show non-negative descriptions
-	} else {
-		$html .= mtarot_card_description_html( $post, $polarity, $desc_index );
-	}
-	
+	$html .= mtarot_card_description_html( $post, $polarity );
 	$html .= mtarot_card_taxonomies_html( $post );
 	$html .= "</div><!--/tcard-->\n";
 	return $html;
@@ -145,7 +119,7 @@ function mtarot_card_label_html( $post, $polarity='' ){
 
 function mtarot_card_img_html( $post, $polarity='' ){
 	$imgName = mtarot_slug($post->ID) . '-' . (empty($polarity)? 'up' : $polarity) ;
-	$url = tcard_option('image_path') . '/' . $imgName . '.' . tcard_option('image_type');
+	$url = tcard_option('image_path') . '/' . $imgName . '.jpg';
 	$class = mtarot_class( 'tcard-face', $polarity );
 	$id = mtarot_id( $post, 'tcard-face', $polarity );
 	$dimensions = 'width="' . tcard_option('image_width') . '" height="' . tcard_option('image_height') . '"';
@@ -171,14 +145,13 @@ function mtarot_card_back_html( $post, $toptions ){
 	return $html;
 }
 
-function mtarot_card_description_html( $post, $polarity='random', $desc_index='random' ){
+function mtarot_card_description_html( $post, $polarity='' ){
 	$html = mtarot_div( $post, 'tcard-description', $polarity );
-	$html .= mtarot_card_description( $post, $polarity, $desc_index );
-/*	switch( $polarity ){
+	switch( $polarity ){
 		case 'up': $html .= mtarot_card_desc_up($post);		break;
 		case 'down': $html .= mtarot_card_desc_down($post); 	break;
 		default: $html .= $post->post_excerpt; 			break;
-	}*/
+	}
 	$html .= "</div><!--/tcard-description-->\n";
 	return $html;
 }

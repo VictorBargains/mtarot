@@ -10,19 +10,12 @@ function tcard_option( $option ){ $o = get_option('tcard_options'); return $o[$o
 // Option Defaults
 function mtarot_default_tcard_options(){
 	return array(
-		'image_path' => '/MichaelCards',
-		'image_type' => 'jpg',
+		'image_path' => 'http://www.michaeltarot.com/tarot/images/MichaelCards',
 		'image_width' => '150',
 		'image_height' => '251',
-		'image_back' => '/wp-content/uploads/2011/03/cardback.jpg',
+		'image_back' => 'http://www.disclosureimperative.com/wp-content/uploads/2011/03/cardback.jpg',
 		'type_name' => 'tarot-card',
-		'taxes_allowed' => mtarot_taxonomy_names(),
-		'daily_post_id' => '',
-		'daily_polarity' => '',
-		'daily_desc_index' => 0,
-		'daily_autogenerate' => 1,
-		'daily_generate' => 0,
-		'daily_date' => ''
+		'taxes_allowed' => mtarot_taxonomy_names()
 	);
 }
 
@@ -37,30 +30,20 @@ if( is_admin() ){ add_action( 'admin_init', 'tcard_admin_init' ); }
 function tcard_admin_init(){
 	register_setting( 'tcard_options', 'tcard_options', 'tcard_options_validate' );
 	
-	/* Post Type Section */
-	add_settings_section( 'tcard_type_section', 'Custom Post Type', 'tcard_type_section_text', 'tcard_options_page' );	
-	add_settings_field( 'tcard_type_name', 'Tarot Card Type:', 'mtarot_option_card_type_name', 'tcard_options_page', 'tcard_type_section' );	
-
 	/* Appearance Section */
 	add_settings_section( 'tcard_appearance_section', 'Tarot Card Images', 'tcard_image_section_text', 'tcard_options_page' );
 	add_settings_field( 'tcard_image_back', 'Card Back Image URL:', 'mtarot_option_card_image_back', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_path', 'Card Face Image Directory:', 'mtarot_option_card_image_path', 'tcard_options_page', 'tcard_appearance_section' );
-	add_settings_field( 'tcard_image_type', 'Image extension type:', 'mtarot_option_card_image_type', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_width', 'Card Image Width:', 'mtarot_option_card_image_width', 'tcard_options_page', 'tcard_appearance_section' );
 	add_settings_field( 'tcard_image_height', 'Card Image Height:', 'mtarot_option_card_image_height', 'tcard_options_page', 'tcard_appearance_section' );
 
+	/* Post Type Section */
+	add_settings_section( 'tcard_type_section', 'Custom Post Type', 'tcard_type_section_text', 'tcard_options_page' );	
+	add_settings_field( 'tcard_type_name', 'Tarot Card Type:', 'mtarot_option_card_type_name', 'tcard_options_page', 'tcard_type_section' );	
+
 	/* Taxonomy Inclusion Section */
 	add_settings_section( 'tcard_taxes_section', 'Custom Taxonomies', 'tcard_taxes_section_text', 'tcard_options_page' );	
-	add_settings_field( 'tcard_taxes_allowed', 'Show Taxonomies in Details:', 'mtarot_option_card_taxes_allowed', 'tcard_options_page', 'tcard_taxes_section' );
-	
-	/* Card of the Day Section */
-	add_settings_section( 'tcard_daily_section', 'Card of the Day', 'tcard_daily_section_text', 'tcard_options_page' );
-	add_settings_field( 'tcard_daily_post_id', 'Post ID:', 'mtarot_option_daily_post_id', 'tcard_options_page', 'tcard_daily_section' );	
-	add_settings_field( 'tcard_daily_polarity', 'Polarity:', 'mtarot_option_daily_polarity', 'tcard_options_page', 'tcard_daily_section' );	
-	add_settings_field( 'tcard_daily_desc_index', 'Description Index:', 'mtarot_option_desc_index', 'tcard_options_page', 'tcard_daily_section' );	
-	add_settings_field( 'tcard_daily_autogenerate', 'Auto-generate new card daily:', 'mtarot_option_daily_autogenerate', 'tcard_options_page', 'tcard_daily_section' );
-	add_settings_field( 'tcard_daily_generate', 'Generate new card now:', 'mtarot_option_daily_generate', 'tcard_options_page', 'tcard_daily_section' );
-	//add_settings_field( 'tcard_daily_date", "Daily Card Date:"', 'mtarot_option_daily_date', 'tcard_options_page', 'tcard_daily_section' );
+	add_settings_field( 'tcard_taxes_allowed', 'Show Taxonomies in Details:', 'mtarot_option_card_taxes_allowed', 'tcard_options_page', 'tcard_taxes_section' );	
 }
 
 /**
@@ -70,12 +53,6 @@ function tcard_admin_init(){
 function mtarot_card_options_page(){
 //MECHO('tcard_options:', get_option('tcard_options'));
 	mtarot_echo_options_page( 'Tarot Card Options', 'Adjust the settings for how tarot cards are stored, dealt, and shown.', 'tcard_options', 'tcard_options_page' );
-}
-
-/* Card Post Types Section */
-function tcard_type_section_text(){ echo 'Select the custom post type you want to represent tarot cards in the deck.'; }
-function mtarot_option_card_type_name(){ 
-	echo mtarot_posttypes_pulldown_html( 'tcard_options[type_name]', tcard_option('type_name'), 'tcard_type_name' );
 }
 
 /* Card Appearance Section */
@@ -88,11 +65,7 @@ function mtarot_option_card_image_back(){
 
 function mtarot_option_card_image_path(){ 
 	echo mtarot_option_text_html( 'tcard_options[image_path]', tcard_option('image_path'), 'tcard_image_path', 100 ); 
-	echo '<br /><i>(this directory will be searched for a file with the name `{tarot-slug}-{polarity}.{image-type}`, all lowercase, to be displayed when a card is dealt face up)</i>';
-}
-
-function mtarot_option_card_image_type(){ 
-	echo mtarot_option_text_html( 'tcard_options[image_type]', tcard_option('image_type'), 'tcard_image_type', 10 ); 
+	echo '<br /><i>(this directory will be searched for a file with the name `{tarot-slug}-{polarity}.jpg`, all lowercase, to be displayed when a card is dealt face up)</i>';
 }
 
 function mtarot_option_card_image_width(){ 
@@ -101,6 +74,12 @@ function mtarot_option_card_image_width(){
 
 function mtarot_option_card_image_height(){	
 	echo mtarot_option_text_html( 'tcard_options[image_height]', tcard_option('image_height'), 'tcard_image_height', 10 ); 
+}
+
+/* Card Post Types Section */
+function tcard_type_section_text(){ echo 'Select the custom post type you want to represent tarot cards in the deck.'; }
+function mtarot_option_card_type_name(){ 
+	echo mtarot_posttypes_pulldown_html( 'tcard_options[type_name]', tcard_option('type_name'), 'tcard_type_name' );
 }
 
 /* Card Taxonomies Section */
@@ -120,9 +99,14 @@ function mtarot_option_card_taxes_allowed(){
 	}
 }
 
+/* Card Post Types Section */
+function tcard_type_section_text(){ echo 'Select the custom post type you want to represent tarot cards in the deck.'; }
+function mtarot_option_card_type_name(){ 
+	echo mtarot_posttypes_pulldown_html( 'tcard_options[type_name]', tcard_option('type_name'), 'tcard_type_name' );
+}
 
-/* Daily Card Section */
-function tcard_daily_section_text(){ echo 'Choose the card, polarity, and description featured in the Card of the Day.'; }
+/* Card of the Day Section */
+function tcard_type_section_text(){ echo 'Choose the card, polarity, and description featured in the Card of the Day.'; }
 
 function mtarot_option_daily_post_id(){	
 	echo mtarot_option_text_html( 'tcard_options[daily_post_id]', tcard_option('daily_post_id'), 'tcard_daily_post_id', 10 ); 
@@ -132,20 +116,18 @@ function mtarot_option_daily_polarity(){
 	echo mtarot_polarities_pulldown_html( 'tcard_options[daily_polarity]', tcard_option('daily_polarity'), 'tcard_daily_polarity' );
 }
 
-function mtarot_option_desc_index(){
-	echo mtarot_option_text_html( 'tcard_options[daily_desc_index]', tcard_option('daily_desc_index'), 'tcard_daily_desc_index', 10 );
-}
-
 function mtarot_option_daily_autogenerate(){
 	echo '<input name="tcard_options[daily_autogenerate]" type="checkbox" value="1" '; 
 	checked( '1', tcard_option( 'daily_autogenerate' ) );
-    echo '<label for="tcard_options[daily_autogenerate]">Generate daily</label>';
+    echo '<label for="tcard_options[daily_autogenerate]">Auto-generate daily card</label>';
 }
 
-function mtarot_option_daily_generate(){
-	echo '<input name="tcard_options[daily_generate]" type="checkbox" value="1" '; 
-	checked( '1', tcard_option( 'daily_generate' ) );
-    echo '<label for="tcard_options[daily_generate]">Generate now</label>';
+function tcard_options_page(){
+	tcard_echo_options_page( 'Tarot Card Options', 
+							  'This page controls the general settings for how the Michael Tarot Deck plugin behaves. The "Card Options" and "Layout Options" sub-pages contain more options.',
+							  'tcard_options',
+							  'tcard_options_page' );
 }
+
 
 ?>

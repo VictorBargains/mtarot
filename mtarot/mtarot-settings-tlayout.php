@@ -68,46 +68,40 @@ function mtarot_layout_options_page(){
 // Layout Post Types Section
 function tlayout_type_section_text(){ echo 'Set the database names of the custom post type you are using to represent tarot layouts.'; }
 
-function tlayout_option_type_name(){ 
-	echo mtarot_posttypes_pulldown_html( 'tlayout_options[type_name]', tlayout_option('type_name'), 'tlayout_type_name' );
-}
-
-/*
 function tlayout_option_type_name(){
 	$options = get_option('tlayout_options');
 	echo "<input id='tlayout_type_name' name='tlayout_options[type_name]' size='30' type='text' value='{$options['type_name']}' />";
 }
-*/
 
 // Layout Form Section
 function tlayout_form_section_text(){ echo 'Set the Prompts (shown before) and Hints (shown after) for the Question and Layout elements that make up the Tarot Form (called via the [mtarot-form] shortcode)'; }
 
 function tlayout_option_form_questionPrompt(){
-	echo '<input id="tlayout_form_questionPrompt" name="tlayout_options[form_questionPrompt]" size="80" type="text" value="' . htmlentities( tlayout_option('form_questionPrompt') ) . '" />';
+	echo '<input id="tlayout_form_questionPrompt" name="tlayout_options[form_questionPrompt]" size="80" type="text" value="' . tlayout_option('form_questionPrompt') . '" />';
 }
 
 function tlayout_option_form_questionHint(){
-	echo '<input id="tlayout_form_questionHint" name="tlayout_options[form_questionHint]" size="80" type="text" value="' . htmlentities( tlayout_option('form_questionHint') ) . '" />';
+	echo '<input id="tlayout_form_questionHint" name="tlayout_options[form_questionHint]" size="80" type="text" value="' . tlayout_option('form_questionHint') . '" />';
 }
 
 function tlayout_option_form_questionLabel(){
-	echo '<input id="tlayout_form_questionLabel" name="tlayout_options[form_questionLabel]" size="40" type="text" value="' . htmlentities( tlayout_option('form_questionLabel') ) . '" />';
+	echo '<input id="tlayout_form_questionLabel" name="tlayout_options[form_questionLabel]" size="40" type="text" value="' . tlayout_option('form_questionLabel') . '" />';
 }
 
 function tlayout_option_form_layoutPrompt(){
-	echo '<input id="tlayout_form_layoutPrompt" name="tlayout_options[form_layoutPrompt]" size="80" type="text" value="' . htmlentities( tlayout_option('form_layoutPrompt') ) . '" />';
+	echo '<input id="tlayout_form_layoutPrompt" name="tlayout_options[form_layoutPrompt]" size="80" type="text" value="' . tlayout_option('form_layoutPrompt') . '" />';
 }
 
 function tlayout_option_form_layoutHint(){
-	echo '<input id="tlayout_form_layoutHint" name="tlayout_options[form_layoutHint]" size="80" type="text" value="' . htmlentities( tlayout_option('form_layoutHint') ) . '" />';
+	echo '<input id="tlayout_form_layoutHint" name="tlayout_options[form_layoutHint]" size="80" type="text" value="' . tlayout_option('form_layoutHint') . '" />';
 }
 
 function tlayout_option_form_layoutLabel(){
-	echo '<input id="tlayout_form_layoutLabel" name="tlayout_options[form_layoutLabel]" size="40" type="text" value="' . htmlentities( tlayout_option('form_layoutLabel') ) . '" />';
+	echo '<input id="tlayout_form_layoutLabel" name="tlayout_options[form_layoutLabel]" size="40" type="text" value="' . tlayout_option('form_layoutLabel') . '" />';
 }
 
 function tlayout_option_form_submitButton(){
-	echo '<input id="tlayout_form_submitButton" name="tlayout_options[form_submitButton]" size="40" type="text" value="' . htmlentities( tlayout_option('form_submitButton') ) . '" />';
+	echo '<input id="tlayout_form_submitButton" name="tlayout_options[form_submitButton]" size="40" type="text" value="' . tlayout_option('form_submitButton') . '" />';
 }
 
 ?>
