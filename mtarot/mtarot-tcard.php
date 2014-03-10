@@ -105,19 +105,19 @@ function mtarot_card( $post, $polarity='random', $desc_index='random' ){
 // Must be in The Loop
 function mtarot_the_card(){
 	global $post;
-	mtarot_card($post, 'up', -1);
+	mtarot_card($post, 'up', 'random');
 }
 
 /* Card HTML Components */
-function mtarot_card_html( $post, $polarity='random', $desc_index=0 ){
+function mtarot_card_html( $post, $polarity='random', $desc_index='random' ){
 	$html = mtarot_div( $post, 'tcard', $polarity );
 	$html .= mtarot_card_face_html( $post, $polarity );
 	$html .= mtarot_card_polarity_html( $post, $polarity );
 	$html .= mtarot_card_label_html( $post, $polarity );
-	
+	/*
 	if( $desc_index < 0 ){
 		// Only show non-negative descriptions
-	} else {
+	} else*/ {
 		$html .= mtarot_card_description_html( $post, $polarity, $desc_index );
 	}
 	

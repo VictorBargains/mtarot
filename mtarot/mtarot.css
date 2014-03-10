@@ -290,15 +290,19 @@ form.mtarot-askagain {
 
 /* Tarot Card */
 
+.tcard {
+	
+	text-align: center;
+}
+
 tarot-card div.tcard {
 
-	width: 150px;
+	width: 190px;
 
 	float: left;
 
 	display: block-inline;	
 
-	text-align: center;
 
 }
 
@@ -427,7 +431,6 @@ tarot-card div.tcard {
 	border: 1px solid #AAA;
 
 }
-
 
 
 /* Card Taxonomies */

@@ -42,8 +42,8 @@ function mtarot_parse_layout( $content ){
 		$deck = mtarot_deck( $slots );		// Agregate slot definitions to get the whole deck
 //		MECHO('mtarot_deck() found ' . count($deck) . ' cards.');
 		
-		mtarot_deal_slots( $deck, &$slots );	// Deal cards from the deck into the $slots array
-		mtarot_deal_layout( &$content, $slots );// Deal cards from $slots into the layout content, replacing [tarot-card] tags.	
+		mtarot_deal_slots( $deck, /*&*/$slots );	// Deal cards from the deck into the $slots array
+		mtarot_deal_layout( /*&*/$content, $slots );// Deal cards from $slots into the layout content, replacing [tarot-card] tags.	
 
 	}
 	return $content;
@@ -242,7 +242,7 @@ function mtarot_generate_layout_form( $content ){
 //mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &$count ]] )	
 //int preg_match_all ( string $pattern , string $subject [, array &$matches [, int $flags = PREG_PATTERN_ORDER [, int $offset = 0 ]]] )
 		$matches = array();
-		$count = preg_match_all( $pattern, $content, &$matches, PREG_OFFSET_CAPTURE );
+		$count = preg_match_all( $pattern, $content, /*&*/$matches, PREG_OFFSET_CAPTURE );
 		if( $count > 0 ){	
 			$offset = $matches[0][0][1];
 			$content = substr_replace( $content, $replacement, $offset, 0 );
@@ -260,7 +260,7 @@ function mtarot_deal_layout( &$content, $slots ){
 	usort( $slots, 'mtarot_slot_pageorder_compare_desc' );
 	$count = 0;
 	foreach( $slots as $slot ){
-		if( is_array($slot) ){ mtarot_deal_card( &$content, $slot ); }
+		if( is_array($slot) ){ mtarot_deal_card( /*&*/$content, $slot ); }
 	}
 }
 
