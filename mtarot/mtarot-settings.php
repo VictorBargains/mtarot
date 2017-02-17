@@ -24,6 +24,11 @@ require_once('mtarot-settings-tlayout.php');
 /**
  * Option Defaults
  **/
+  
+
+$mtarot_default_action = /* 'http://' . site_url() .*/ '/wp-content/plugins/mtarot/mtarot-ask.php';
+//$mtarot_default_action = '/' . tlayout_option('type_name') . '/michaels-thought';
+
 function mtarot_should_clobber_options(){ return true; } // TODO: make an option
 
 function mtarot_set_default_options(){

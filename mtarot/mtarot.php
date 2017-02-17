@@ -4,7 +4,7 @@
 	Plugin URI: 	http://www.themichaelteaching.com/
 	Description: 	Display Tarot Cards individually or as part of a reading which gets dealt randomly from the deck.
 	Author: 		Victor Andersen
-	Version: 		0.3
+	Version: 		0.5
 	Author URI: 	http://www.themichaelteaching.com/
 */
 
@@ -36,7 +36,7 @@ require_once('mtarot-widgets.php');		// Hooks into WordPress's widget API to use
 /* Taxonomy Accessors */
 function MTAROT_DEFAULT_TAXONOMIES_ARGS(){
 	return array(
-		'object_type' => array( tcard_option('type_name') ), 
+		/*'object_type' => array( tcard_option('type_name') ), */
 		'public' => true, 
 		'_builtin' => false 
 	);

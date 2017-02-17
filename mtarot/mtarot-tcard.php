@@ -64,18 +64,41 @@ function mtarot_random_polarity(){
 	return $polarities[$pindex];
 }
 
+<<<<<<< Updated upstream
 // Get a random polar description of the card (if no polarity specified, returns post content)
 function mtarot_card_description( $post, $polarity='random', $index='random' ){
 	if( $polarity == 'random' ){ $polarity = mtarot_random_polarity(); }
 	
+=======
+// Get an array of all descriptions, positive and negative, for a given card
+function mtarot_card_descriptions( $post, $polarity='' ){
+	
+	// If a random polarity is desired, make it decide here
+	if( $polarity == 'random' ){ $polarity = mtarot_random_polarity(); }
+		
+	// Pick the description from the database depending on which polarity was chosen
+>>>>>>> Stashed changes
 	$meta = '';
 	switch( $polarity ){
 		case 'up': $meta = 'positive-description'; break;
 		case 'down': $meta = 'negative-description'; break;
+		default:	return array( $post->post_excerpt );
 	}
 	
 	$descs = get_post_meta( $post->ID, $meta, false );
 
+<<<<<<< Updated upstream
+=======
+	return $descs;
+}
+
+// Get a random polar description of the card (if no polarity specified, returns post content)
+function mtarot_card_description( $post, $polarity='', $index='random' ){
+	
+	$descs = mtarot_card_descriptions( $post, $polarity );
+	
+	// When no polarity is specified, use the excerpt as a description and ignore $
+>>>>>>> Stashed changes
 	if( empty($descs) ){ return $post->post_excerpt; }
 	
 	$dindex = ($index == 'random') ? array_rand($descs) : ($index % count($descs) );
@@ -83,6 +106,58 @@ function mtarot_card_description( $post, $polarity='random', $index='random' ){
 	return $descs[$dindex];
 }
 
+<<<<<<< Updated upstream
+=======
+// Helper function to make a JSON style array out of a provided PHP array. //TODO: move elsewhere or replace with actual JSON library method
+function javascript_array( $input_array ){
+	$html = "[";
+	for( $i = 0; $i < count($input_array); $i++ ){
+		$html .= "'" . addslashes($input_array[$i]) . "'";
+		if( $i < count($input_array) - 1 ){ $html .= ", \n"; }
+	}
+	$html .= "]";
+	return $html;	
+}
+
+// Display controls which allow the description to change dynamically
+function mtarot_card_description_controls_html( $post ){
+	$updescs = mtarot_card_descriptions( $post, 'up' );
+	$downdescs = mtarot_card_descriptions( $post, 'down' );
+	$genericdescs = mtarot_card_descriptions( $post );
+	$hint_message = "Click the + or - buttons to cycle through the various interpretations of this card when it is dealt in the Illuminated (+) or Shadow (-) position. Click this text again to return to the general description.";
+	
+	$html = "<script language='javascript'>\n";
+	$html .= "var desc_polarity = 'none';\n";
+	$html .= "var desc_indices = { 'up' : 0, 'down' : 0, 'none' : 0 };\n";
+	$html .= "var card_descriptions = { 'up' : " . javascript_array($updescs) . ", 'down' : " . javascript_array($downdescs) . ", 'none' : " . javascript_array($genericdescs) . " };\n";
+	$html .= "var card_image_urls = { 'up' : '" . mtarot_card_img_url($post, 'up') . "', 'down' : '" . mtarot_card_img_url($post, 'down') . "' };\n";
+
+	$html .= "function showNextDescription(polarity) {\n";
+	$html .= "  if( polarity === desc_polarity && polarity === 'none' ){ alert('" . addslashes($hint_message) . "'); }\n";
+	$html .= "  desc_polarity = polarity;\n";
+	$html .= "  desc_indices[polarity] = (desc_indices[polarity] + 1)  % card_descriptions[polarity].length;\n";
+	$html .= "  document.getElementById('tcard-description-" . $post->ID . "').innerHTML = card_descriptions[polarity][desc_indices[polarity]];\n";
+	$html .= "  if( polarity != 'down' ){ polarity = 'up'; }\n";
+	$html .= "  document.getElementById('tcard-face-" . $post->ID . "').src = card_image_urls[polarity];\n";
+	$html .= "}\n";
+
+	$html .= "</script>\n";
+	
+	$html .= '<div id="tcard-desc-controls">';
+	$html .= '<span id="tcard-desc-control-buttons">';
+	$html .= '<a href="#" onclick="showNextDescription(\'up\'); return false;" title="Click to show an Illuminated meaning of this card...">';
+	$html .= mtarot_card_polarity_html( $post, 'up' );
+	$html .= '</a>';
+	$html .= '<a href="#" onclick="showNextDescription(\'down\'); return false;" title="Click to show a Shadow meaning of this card...">';
+	$html .= mtarot_card_polarity_html( $post, 'down' );
+	$html .= '</a>';
+	$html .= '</span>';
+	$html .= '<a href="#" onclick="showNextDescription(\'none\'); return false;" title="Click to show the generic meaning of this card...">See other meanings</a>:';
+	$html .= '</div>';
+	return $html;
+}
+
+>>>>>>> Stashed changes
 function mtarot_card_desc_up( $post, $index='random' ){
 	return mtarot_card_description( $post, 'up', $index );/*
 	$desc = get_post_meta( $post->ID, 'positive-description', false );
@@ -98,22 +173,38 @@ function mtarot_card_desc_down( $post, $index='random' ){
 }
 
 /* Show entire card */
+<<<<<<< Updated upstream
 function mtarot_card( $post, $polarity='random', $desc_index='random' ){
+=======
+function mtarot_card( $post, $polarity='', $desc_index=-1 ){
+>>>>>>> Stashed changes
 	echo mtarot_card_html( $post, $polarity, $desc_index );
 }
 
 // Must be in The Loop
 function mtarot_the_card(){
 	global $post;
+<<<<<<< Updated upstream
 	mtarot_card($post, 'up', 'random');
 }
 
 /* Card HTML Components */
 function mtarot_card_html( $post, $polarity='random', $desc_index='random' ){
+=======
+	mtarot_card($post/*, 'up', 'random'*/); // commenting out to use function defaults
+}
+
+/* Card HTML Components */
+function mtarot_card_html( $post, $polarity='', $desc_index='' ){
+	// Polarity and description index should be defined at this level so they will be consistent among the pieces:
+	
+>>>>>>> Stashed changes
 	$html = mtarot_div( $post, 'tcard', $polarity );
+	
 	$html .= mtarot_card_face_html( $post, $polarity );
 	$html .= mtarot_card_polarity_html( $post, $polarity );
 	$html .= mtarot_card_label_html( $post, $polarity );
+<<<<<<< Updated upstream
 	/*
 	if( $desc_index < 0 ){
 		// Only show non-negative descriptions
@@ -121,6 +212,14 @@ function mtarot_card_html( $post, $polarity='random', $desc_index='random' ){
 		$html .= mtarot_card_description_html( $post, $polarity, $desc_index );
 	}
 	
+=======
+
+	$html .= mtarot_card_description_html( $post, $polarity, $desc_index );
+	
+	$html .= mtarot_card_description_controls_html( $post );
+	
+	$html .= '<!-- taxonomies: -->';
+>>>>>>> Stashed changes
 	$html .= mtarot_card_taxonomies_html( $post );
 	$html .= "</div><!--/tcard-->\n";
 	return $html;
@@ -143,9 +242,17 @@ function mtarot_card_label_html( $post, $polarity='' ){
 	return $html;
 }
 
-function mtarot_card_img_html( $post, $polarity='' ){
+function mtarot_card_img_url( $post, $polarity ){
 	$imgName = mtarot_slug($post->ID) . '-' . (empty($polarity)? 'up' : $polarity) ;
 	$url = tcard_option('image_path') . '/' . $imgName . '.' . tcard_option('image_type');
+<<<<<<< Updated upstream
+=======
+	return $url;
+}
+
+function mtarot_card_img_html( $post, $polarity='' ){
+	$url = mtarot_card_img_url( $post, $polarity );
+>>>>>>> Stashed changes
 	$class = mtarot_class( 'tcard-face', $polarity );
 	$id = mtarot_id( $post, 'tcard-face', $polarity );
 	$dimensions = 'width="' . tcard_option('image_width') . '" height="' . tcard_option('image_height') . '"';
@@ -196,6 +303,7 @@ function mtarot_card_taxonomy_html( $post, $taxonomy ){
 	if( in_array( $taxonomy, MTAROT_HIDE_TAXONOMIES() ) ){ return $html; }
 
 	$taxTerms = get_the_terms( $post->ID, $taxonomy );
+	MECHO("Tax Terms: ", $taxTerms);
 	if( !empty($taxTerms) ){
 		$tax = get_taxonomy($taxonomy);
 		$taxURL = get_option('siteurl') . '/' . $tax->name;
@@ -214,7 +322,9 @@ function mtarot_card_taxonomy_html( $post, $taxonomy ){
 
 function mtarot_card_taxonomies_html( $post ){
 	$html = mtarot_div( $post, 'taxonomies', 'tarot-card' );
+	MECHO("Found taxonomies: ", mtarot_taxonomy_names() );
 	foreach( mtarot_taxonomy_names() as $taxonomy ){
+		MECHO("Taxonomy: ", $taxonomy);
 		$html .= mtarot_card_taxonomy_html( $post, $taxonomy );
 	}
 	$html .= "</div><!--/tcard-taxonomies-->\n";

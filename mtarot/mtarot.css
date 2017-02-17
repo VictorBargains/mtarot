@@ -1,5 +1,9 @@
 /* CSS For Michael Tarot Cards/Layouts */
 
+/* center cards in white containers */
+.tcard-face-container {
+	text-align:	center;
+}
 
 
 /* add rounded corners */
@@ -356,7 +360,33 @@ tarot-card div.tcard {
 
 }
 
+#tcard-desc-controls {
+	border-top: 1px solid #888;
+	border-bottom: 1px solid #888;
+	padding-top: 2px;
+	padding-bottom: 2px;	
+}
 
+#tcard-desc-controls .up-tcard-polarity {
+	margin: 0px;
+	float: none;
+	clear: none;
+	display: inline-block;
+	
+}
+
+#tcard-desc-controls .down-tcard-polarity {
+	margin: 0px;
+	float: right;
+	clear: none;
+	display: inline;
+	
+}
+
+#tcard-desc-control-buttons {
+	float: right;
+	width: 50px;	
+}
 
 .up-tcard-polarity {
 
