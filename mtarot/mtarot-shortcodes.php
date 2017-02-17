@@ -32,11 +32,7 @@ function MTAROT_FORM_DEFAULT_SHORTCODE_ATTS(){
 		'width' => '440',
 		'style' => 'light',
 		'method' => 'POST',
-<<<<<<< Updated upstream
-		'action' => '/tarot-layout/michaels-thought/',	// This should be pulled dynamically, or a specific page for a reading should be made
-=======
 		'action' => $mtarot_default_action,
->>>>>>> Stashed changes
 		'questionType' => 'new',
 		'showAsked' => 'true',
 		'questionprompt' => tlayout_option('form_questionPrompt'),
