@@ -40,7 +40,7 @@ function mtarot_slots( $text ){
 	*/
 	$flags = PREG_OFFSET_CAPTURE | PREG_SET_ORDER;
 	$matches = array();
-	preg_match_all( $regex, $text, &$matches, $flags );
+	preg_match_all( $regex, $text, /*&*/$matches, $flags );
 	$pageorder = 0;
 	foreach( $matches as $match ){ // each $match should have one element per catch group
 		$fulltext = $match[0][0];
@@ -87,7 +87,7 @@ function mtarot_slot_options( $args ){
 		Orders results so that $matches[0] is an array of first set of matches, 
 		$matches[1] is an array of second set of matches, and so on.
 	*/
-	preg_match_all( $argrx, $args, &$argmatches, PREG_SET_ORDER );
+	preg_match_all( $argrx, $args, $argmatches, PREG_SET_ORDER );
 	
 	// process arguments
 	foreach( $argmatches as $argmatch ){
@@ -116,7 +116,7 @@ function mtarot_slot_options( $args ){
 				case 'filters':
 					$filters = mtarot_unpack_filters($value);
 					$toptions['filters'] = $filters; // For now don't do any fancy stuff to the filters after unpacking
-//					mtarot_add_filters( &$toptions['filters'], $filters );
+//					mtarot_add_filters( $toptions['filters'], $filters );
 					break;
 			}
 		}
@@ -133,12 +133,12 @@ function mtarot_undealt_card_html( $post, $toptions ){
 	return $html;
 }
 
-function mtarot_dealt_card_html( $post, $polarity ){
+function mtarot_dealt_card_html( $post, $polarity, $desc_index='random' ){
 	$html .= mtarot_div( $post, 'tcard', $polarity );
-	$html .= '<a target="_blank" href="/tcard/' . $post->post_name . '">' . $post->post_title;
+	$html .= '<a target="_blank" href="/tcard/' . $post->post_name . '"><div class="tcard-name">' . $post->post_title . '</div>';
 	$html .= mtarot_card_face_html($post, $polarity) . '</a>';
 	$html .= mtarot_card_polarity_html($post, $polarity);
-	$html .= mtarot_card_description_html($post, $polarity);
+	$html .= mtarot_card_description_html($post, $polarity, $desc_index);
 	$html .= '</div><!--/tcard-->';
 	return $html;
 }

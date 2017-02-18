@@ -12,7 +12,9 @@ require_once('mtarot.php');
  * get a single tarot-card post via custom arguments
  */
 function mtarot_get_tcard_post( $args ){
+	MECHO("finding tcards with args: ", $args);
 	$tcards = mtarot_get_tcard_posts( $args );
+	MECHO("found ". count($tcards) . " tcards.");
 	return empty( $tcards ) ? NULL : $tcards[0];
 }
 
@@ -43,7 +45,7 @@ function mtarot_get_tcard_ids(){
 function mtarot_random_card_id( $exclude = array() ){
 	//1. get all tarot card post IDs
 	$ids = mtarot_get_tcard_ids();
-	
+	MECHO("Selecting random ID from " . count($ids) . " possibilities (" . count($exclude) . " excluded)...");
 	if( empty( $ids ) ){ return NULL; }
 	
 	//2. remove any IDs which match $exclude

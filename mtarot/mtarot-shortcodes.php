@@ -24,12 +24,15 @@ function MTAROT_SHORTCODE_ALLOWED_ARGUMENTS(){ //Arguments allowed inside `[taro
  
 require_once('mtarot-question.php');
 
+/** TAROT FORM SHORTCODE **/
+
 function MTAROT_FORM_DEFAULT_SHORTCODE_ATTS(){
+	global $mtarot_default_action;
 	return array(
 		'width' => '440',
 		'style' => 'light',
 		'method' => 'POST',
-		'action' => '/',
+		'action' => $mtarot_default_action,
 		'questionType' => 'new',
 		'showAsked' => 'true',
 		'questionprompt' => tlayout_option('form_questionPrompt'),
@@ -54,6 +57,8 @@ function mtarot_form_shortcode( $atts ){
 	}
 }
 add_shortcode( 'mtarot-form', 'mtarot_form_shortcode' );
+
+/** TAROT CARD SHORTCODE **/
 
 /* Shortcode Content Parsing*/
 function MTAROT_DEFAULT_SHORTCODE_ATTS(){ // This array specifies the default arguments and values for the shortcode
@@ -85,13 +90,15 @@ function tcard_shortcode( $toptions, $content=null ){
 	// Initialize output
 	$html = '';
 
+/*
+
 	// Set the arguments used for the post query
 	$qargs = array(
 		'post_type'		=> tcard_option('type-name'),
 		'orderby' 		=> 'desc',
 	);
 	
-	if( !is_empty( $args['tarot-slug'] ) ){
+	if( !empty( $args['tarot-slug'] ) ){
 		// get cards where custom field "tarot-slug" matches $args['tarot-slug']
 		$qargs['meta_key'] = 'tarot-slug';
 		$qargs['meta_value'] = $args['tarot-slug'];
@@ -101,12 +108,12 @@ function tcard_shortcode( $toptions, $content=null ){
 	}
 	
 	// Filter by category
-	if( !is_empty( $args['category'] ) ){
+	if( !empty( $args['category'] ) ){
 		$qargs['category'] = $args['category'];
 	}
 	
 	// Filter by overleaf
-	if( !is_empty( $args['overleaf'] ) ){
+	if( !empty( $args['overleaf'] ) ){
 		$qargs['overleaf'] = $args['overleaf'];
 	}
 	
@@ -115,13 +122,22 @@ function tcard_shortcode( $toptions, $content=null ){
 	// Get list of card IDs which match query
 	$posts_array = get_posts( $qargs );
 	
+	*/
+	
+	$posts_array = mtarot_get_tcard_posts( $args );
+	
 	// Pick a random polarity unless one was specified
-	$polarity = is_empty( $args['polarity'] ) ? array_random('up','down') : $args['polarity'];
+	$polarity = empty( $args['polarity'] ) ? mtarot_random_polarity() : $args['polarity'];
 	
 	// Append HTML for slot with dealt card if no error
-	if( is_empty( $posts_array ) ){
+	if( empty( $posts_array ) ){
 		$html += '<div class="error">Error: cannot deal card (no posts matching query).</div>';
 	} else {
+		
+		// TODO: Offer a selection mode to choose which html method is called to render the card
+		// TODO: Introduce shortcode argument to manage selection mode
+		// TODO: Add widget which offers parameters to duplicate shortcode output
+		
 		$html += mtarot_dealt_card_html( $posts_array[0], $polarity );
 	}
 	

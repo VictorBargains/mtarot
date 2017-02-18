@@ -20,16 +20,21 @@
 			while( $chosen_cotd == NULL ){
 				
 				// Once every description has been used once, we should reset the card-of-the-day metadata so we don't infinitely loop.
-				if( count($exclude) == mtarot_option('deck_size') ){
-					mtarot_reset_daily();
+				if( count($exclude) >= mtarot_option('deck_size') ){
+					MECHO("Resetting daily card selection due to exclusion count reaching deck size ", mtarot_option('deck_size') );
+					mtarot_reset_daily($exclude, true);
+					$exclude = array();
 				}
 				
 				$new_id = mtarot_random_card_id( $exclude );
+				
+				MECHO("Trying to select daily card ID " . $new_id . "...");
 	
 				// To process post meta data we need to get the post which is our new daily card
 				$tcard = get_post( $new_id );
 				
 				if( empty( $tcard ) ){
+					MECHO("Bad card data.");
 					continue;
 				}
 				
@@ -59,6 +64,8 @@
 	
 				// test to see if this card has been used as a card of the day before
 				$cotd_metas = get_post_meta( $new_id, 'card-of-the-day' );
+				
+				if( count($cotd_metas) > 0 ) { MECHO("Already featured!"); }
 	
 				// randomize possible outcomes so if we pick the first one it will be randomly selected
 				shuffle( $possible_cotds );
@@ -96,7 +103,7 @@
 			}
 			
 			// $chosen_cotd should have been set by now, so we should activate it...
-			
+			MECHO("Setting new daily card ID " . $new_id . "...");
 			// pass the ID of the post to the system which stores it in the options
 			$chosen_cotd['id'] = $new_id;
 			mtarot_set_daily( $chosen_cotd );
@@ -118,28 +125,46 @@
 	
 		if( !$wipe_post_meta ){ return; }
 		
+		
 		// get all posts which have been previously featured as a daily card.
-		$cotd_posts = get_posts( array(	'meta_key' => 'card-of-the-day' ) );
+		$args = array(	
+			'meta_key' => 'card-of-the-day', 
+			'post_type' => tcard_option('type_name'),
+			'posts_per_page' => '-1' 
+		);
+		MECHO("Searching for daily cards with $args: ", $args);
+		$cotd_posts = get_posts( $args );
 	
-		if( count( $exclude ) == count( $cotd_posts ) ){
+		MECHO("Found " . count( $cotd_posts ) . " card-of-the-day entries to reset...");
+	
+//		if( count( $exclude ) == count( $cotd_posts ) ){
 			// number of cards of the day equals number of cards of the day, then we are fully saturated and should reset
-			foreach( $cotd_posts as $post ){
+			foreach( $cotd_posts as $p ){
+				MECHO("Removing card-of-the-day metadata from post ID " . $p->ID . "...");
 				// remove all 'card-of-the-day' meta fields from each post
-				delete_post_meta( $post->post_id, 'card-of-the-day' );
+				$success = delete_post_meta( $p->ID, 'card-of-the-day' );
+				if( !$success ){ MECHO("Failure!"); }
 			}
-		}
+//		}
 	}
 	
 	
 	// Get the data describing the card of the day, auto-generating it if the option is set.
  	function mtarot_get_daily(){
 		
+		MECHO("Current time:", current_time('mysql'));
+		
 		$current_time = split( " ", current_time('mysql') );
 		
+		$compare_date = tcard_option('daily_date');
+
+		MECHO("Testing if stored daily card date '" . $compare_date . "' equals '" . $current_time[0] . "'...");
 		
-		if( $current_time[0] != tcard_option('daily_date') ){
+		if( $current_time[0] != $compare_date ){
 			if( tcard_option('daily_autogenerate') ){
+				MECHO("Daily card date mismatch. Generating new daily card...");
 				mtarot_generate_daily();
+//				mtarot_set_daily($daily);
 			}	
 		}
 		
@@ -147,7 +172,7 @@
 			'id'			 => tcard_option('daily_post_id'),
 			'polarity'		 => tcard_option('daily_polarity'),
 			'desc_index' 	 => tcard_option('daily_desc_index'),
-			'date'			 => tcard_option('daily_date')
+			'date'			 => $current_time[0]
 		);
 		
 		return $daily;
@@ -156,9 +181,11 @@
 	// persistently store the daily card info
  	function mtarot_set_daily( $daily ){
 		if( isset( $daily['id'] ) ){
-			$id = $daily['id'];
 			
-			$post = mtarot_get_tcard_post( $id );
+			$id = $daily['id'];
+			MECHO("Setting daily card to ID " . $id . ".");
+			
+			$post = mtarot_get_tcard( $id );
 			if( !empty( $post ) ){
 				
 				// set the global options data to identify this card as the card of the day
@@ -171,15 +198,18 @@
 				$tcard_opts['daily_desc_index'] = $daily['desc_index'];
 				$tcard_opts['daily_date'] = isset( $daily['date'] ) ? $daily['date'] : $current_time[0];
 				
+				MECHO("Setting daily card with options: ", $tcard_opts);
+				
 				update_option( 'tcard_options', $tcard_opts );
 				
 				// we don't need to store the id in the post's card-of-the-day record because it is redundant
-				unset( $daily['id'] );
+	//			unset( $daily['id'] );
 				
 				// add the card-of-the-day metadata for this card with today's date and the chosen polarity/description
 				add_post_meta( $id, 'card-of-the-day', $daily );
 			}
 		}
+		return $daily;
 	}
  
  	function mtarot_daily_card_html(){

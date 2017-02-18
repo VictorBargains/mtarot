@@ -23,8 +23,8 @@ function MTAROT_ALLOWED_FILTERS() {
  * have a key named 'filters' which itself is an array of filter arrays where each key
  * is a taxonomy or property name and each value is a term or property value.
  **/
-function mtarot_add_filters( &$toptions, $filters ){
-	$tf =& $toptions['filters']; // Existing filters are stored in toptions
+function mtarot_add_filters( /*&*/$toptions, $filters ){
+	$tf =/*&*/ $toptions['filters']; // Existing filters are stored in toptions
 	foreach( $filters as $f ){
 		foreach( array_keys($f) as $k ){ // Keys represent filter names
 			if( array_key_exists( $k, $tf ) ){ // Merge new terms into existing filter
@@ -36,8 +36,8 @@ function mtarot_add_filters( &$toptions, $filters ){
 	}
 }
 
-function mtarot_remove_filters( &$toptions, $filters ){
-	$tf =& $toptions['filters']; // Existing filters are stored in toptions
+function mtarot_remove_filters( /*&*/$toptions, $filters ){
+	$tf =/*&*/ $toptions['filters']; // Existing filters are stored in toptions
 	foreach( $filters as $f ){ // Test each filter to see if it needs to be removed
 		foreach( array_keys($f) as $k ){ // If a filter does exist, remove the specified terms
 			if( !empty($tf[$k]) ){ $tf[$k] = array_diff( $tf[$k], $f[$k] ); }
@@ -45,12 +45,12 @@ function mtarot_remove_filters( &$toptions, $filters ){
 	}
 }
 
-function mtarot_reset_filters( &$toptions ){
+function mtarot_reset_filters( /*&*/$toptions ){
 	$toptions['filters'] = array();
 }
 
 /* WordPress Queries */
-function mtarot_add_wpqueryarg_cat( &$args, $filter ){
+function mtarot_add_wpqueryarg_cat( /*&*/$args, $filter ){
 	$param = $filter['param'];
 	
 	// Get the terms from the filter as an array and operate on them
@@ -75,7 +75,7 @@ function mtarot_add_wpqueryarg_cat( &$args, $filter ){
 	}
 }
 
-function mtarot_add_wpqueryarg_tax( &$args, $filter ){
+function mtarot_add_wpqueryarg_tax( /*&*/$args, $filter ){
 	$args['tax_query'][] = array(
 		'taxonomy' => $param,
 		'field' => 'slug',
@@ -83,7 +83,7 @@ function mtarot_add_wpqueryarg_tax( &$args, $filter ){
 	);
 }
 
-function mtarot_add_wpqueryarg_meta( &$args, $filter ){
+function mtarot_add_wpqueryarg_meta( /*&*/$args, $filter ){
 	/* WP_Query needs a meta_query block to define a custom field query*/
 	$args['meta_query'] = array(
 		array(
@@ -100,13 +100,13 @@ function mtarot_query_arguments( $filter ) {
 	// Some filters can be converted as-is, others need translation.
 	foreach( $filter as $param => $terms ){
 		if( $param == 'category' ){ 
-			mtarot_add_wpqueryarg_cat( &$args, $filter );
+			mtarot_add_wpqueryarg_cat( /*&*/$args, $filter );
 		}
 /*		else if( in_array( $param, MTAROT_ALLOWED_CUSTOMFIELDS() ) ){
-			mtarot_add_wpqueryarg_meta( &$args, $filter );
+			mtarot_add_wpqueryarg_meta( $args, $filter );
 		} 
 		else if( !empty($param) && taxonomy_exists($param) ){
-			mtarot_add_wpqueryarg_tax( &$args, $filter );		
+			mtarot_add_wpqueryarg_tax( $args, $filter );		
 		}
 */	}
 	
